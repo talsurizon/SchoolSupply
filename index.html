@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>חזרה לבית הספר | הנהגת ההורים × כפר השעשועים</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800;900&family=Heebo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF3E2;
+    --paper-line:#E4D9BE;
+    --ink:#1E2B22;
+    --ink-soft:#4B5A50;
+    --forest:#1F4D3D;
+    --forest-light:#2F7A5C;
+    --amber:#E8A23A;
+    --amber-deep:#C97F1F;
+    --coral:#DA6A4C;
+    --cream-card:#FFFDF8;
+    --shadow: 0 10px 30px rgba(31,77,61,0.12);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      repeating-linear-gradient(var(--paper), var(--paper) 37px, var(--paper-line) 38px),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Heebo', sans-serif;
+    min-height:100vh;
+    direction:rtl;
+  }
+  h1,h2,h3,.display{
+    font-family:'Rubik','Heebo',sans-serif;
+  }
+  a{color:inherit;}
+  button{font-family:inherit;cursor:pointer;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+
+  /* ---------- Top logo bar ---------- */
+  .logobar{
+    background:var(--forest);
+    color:#fff;
+    padding:14px 0;
+  }
+  .logobar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .brandmark{display:flex;align-items:center;gap:10px;}
+  .brandmark .label{font-size:13px;line-height:1.3;opacity:.85;}
+  .brandmark .name{font-family:'Rubik';font-weight:700;font-size:17px;}
+  .x-divider{font-size:20px;opacity:.5;font-weight:300;}
+
+  /* ---------- Hero ---------- */
+  .hero{position:relative;padding:56px 0 40px;overflow:hidden;}
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 500px 220px at 90% 0%, rgba(232,162,58,0.20), transparent 60%),
+      radial-gradient(ellipse 400px 220px at 5% 10%, rgba(31,77,61,0.10), transparent 60%);
+    pointer-events:none;
+  }
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--forest); color:#fff;
+    font-size:13px; font-weight:600;
+    padding:6px 14px; border-radius:999px;
+    margin-bottom:18px;
+  }
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--amber);}
+  .hero h1{
+    font-size:clamp(28px, 4vw, 42px);
+    line-height:1.35;
+    font-weight:800;
+    max-width:820px;
+    margin:0 0 14px;
+    color:var(--forest);
+  }
+  .hero h1 .accent{color:var(--coral);}
+  .hero p.sub{
+    font-size:17px; color:var(--ink-soft); max-width:640px; line-height:1.7; margin:0 0 34px;
+  }
+
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:14px;
+    position:relative;
+    z-index:1;
+  }
+  .step{
+    background:var(--cream-card);
+    border:1px solid var(--paper-line);
+    border-radius:14px;
+    padding:18px 16px;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .step .num{
+    font-family:'Rubik'; font-weight:800; font-size:26px; color:var(--amber-deep);
+    display:block; margin-bottom:8px;
+  }
+  .step p{margin:0; font-size:14.5px; line-height:1.5; color:var(--ink);}
+  .step.final{background:var(--forest); color:#fff;}
+  .step.final .num{color:var(--amber);}
+  .step.final p{color:#EAF3EE;}
+
+  @media(max-width:820px){ .steps{grid-template-columns:1fr 1fr;} }
+  @media(max-width:520px){ .steps{grid-template-columns:1fr;} }
+
+  /* ---------- Grade grid ---------- */
+  .section-title{
+    display:flex; align-items:baseline; gap:10px;
+    margin:52px 0 22px;
+  }
+  .section-title h2{font-size:24px;color:var(--forest);margin:0;}
+  .section-title span{color:var(--ink-soft); font-size:14px;}
+
+  .grade-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+    padding-bottom:70px;
+  }
+  @media(max-width:900px){ .grade-grid{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:560px){ .grade-grid{grid-template-columns:1fr;} }
+
+  .grade-card{
+    background:var(--cream-card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    overflow:hidden;
+    border:1px solid rgba(0,0,0,0.04);
+    display:flex; flex-direction:column;
+    transition:transform .18s ease, box-shadow .18s ease;
+    text-align:right;
+  }
+  .grade-card:hover{transform:translateY(-4px); box-shadow:0 16px 34px rgba(31,77,61,0.18);}
+  .grade-tab{
+    height:64px;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 20px;
+    color:#fff;
+    position:relative;
+  }
+  .grade-tab::after{
+    content:"";
+    position:absolute; bottom:-10px; right:24px;
+    width:0;height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+    border-top:10px solid currentColor;
+    opacity:.9;
+  }
+  .grade-tab .letter{
+    font-family:'Rubik'; font-weight:900; font-size:30px;
+  }
+  .grade-tab .tag{
+    font-size:12px; background:rgba(255,255,255,.22); padding:4px 10px; border-radius:999px;
+  }
+  .grade-body{padding:26px 20px 22px;flex:1;display:flex;flex-direction:column;}
+  .grade-body h3{margin:0 0 6px; font-size:18px; color:var(--ink);}
+  .grade-body .count{font-size:13px;color:var(--ink-soft); margin-bottom:18px;}
+  .price-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+  .price{font-family:'Rubik'; font-weight:800; font-size:24px; color:var(--forest);}
+  .price small{font-size:13px;font-weight:500;color:var(--ink-soft);}
+  .btn{
+    border:none; border-radius:12px; padding:11px 20px;
+    font-weight:700; font-size:14.5px;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn-primary{background:var(--forest); color:#fff;}
+  .btn-primary:hover{background:var(--forest-light);}
+  .btn-amber{background:var(--amber); color:#2A1C05;}
+  .btn-amber:hover{background:var(--amber-deep); color:#fff;}
+  .btn-ghost{background:transparent; color:var(--forest); border:1.5px solid var(--forest);}
+  .btn-ghost:hover{background:var(--forest); color:#fff;}
+  .btn-block{width:100%; justify-content:center;}
+
+  /* ---------- Package detail page ---------- */
+  .pkg-header{
+    display:flex; align-items:center; gap:16px; margin:36px 0 8px;
+  }
+  .pkg-tab{
+    width:64px;height:64px;border-radius:16px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    color:#fff; font-family:'Rubik'; font-weight:900; font-size:28px;
+    box-shadow:var(--shadow);
+  }
+  .pkg-header h2{margin:0;font-size:24px;color:var(--forest);}
+  .pkg-header .price{font-size:20px;}
+  .breadcrumb{font-size:13.5px;color:var(--ink-soft); margin-bottom:6px;}
+  .breadcrumb button{background:none;border:none;color:var(--forest-light);font-weight:600;padding:0;font-size:13.5px;}
+
+  .pkg-layout{display:grid; grid-template-columns:1.5fr 1fr; gap:28px; padding-bottom:110px;}
+  @media(max-width:860px){.pkg-layout{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--cream-card);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:24px 22px;
+    border:1px solid rgba(0,0,0,0.04);
+  }
+  .card h3{margin:0 0 14px; font-size:16px; color:var(--forest);}
+
+  .item-list{list-style:none; margin:0; padding:0;}
+  .item-list li{
+    display:flex; align-items:flex-start; gap:10px;
+    padding:10px 0;
+    border-bottom:1px dashed var(--paper-line);
+    font-size:14.5px; line-height:1.5;
+  }
+  .item-list li:last-child{border-bottom:none;}
+  .item-list li .check{
+    flex:none; width:18px;height:18px;border-radius:5px;
+    background:var(--forest-light); color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:11px; margin-top:2px;
+  }
+
+  .custom-item{
+    background:#FFF8EA;
+    border:1px solid #F0DDA9;
+    border-radius:12px;
+    padding:14px 14px 12px;
+    margin-bottom:14px;
+  }
+  .custom-item:last-child{margin-bottom:0;}
+  .custom-item .label{
+    display:flex; align-items:center; gap:8px; font-weight:700; font-size:14.5px; margin-bottom:8px; color:var(--ink);
+  }
+  .custom-item .badge{
+    font-size:11px; background:var(--amber); color:#2A1C05; padding:2px 8px; border-radius:999px; font-weight:700;
+  }
+  select.design-select{
+    width:100%;
+    padding:10px 12px;
+    border-radius:9px;
+    border:1.5px solid #E3CE96;
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%231F4D3D' stroke-width='3'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat left 12px center;
+    font-family:inherit; font-size:14px; color:var(--ink);
+    appearance:none; -webkit-appearance:none;
+  }
+  select.design-select:focus{outline:2px solid var(--forest-light); outline-offset:1px;}
+
+  .summary-row{display:flex; justify-content:space-between; font-size:14px; padding:7px 0; border-bottom:1px dashed var(--paper-line);}
+  .summary-row:last-of-type{border-bottom:none;}
+  .summary-total{display:flex;justify-content:space-between; font-family:'Rubik'; font-weight:800; font-size:19px; color:var(--forest); margin-top:10px; padding-top:12px; border-top:2px solid var(--forest);}
+
+  /* ---------- Cart bar ---------- */
+  .cartbar{
+    position:fixed; bottom:0; right:0; left:0;
+    background:var(--forest); color:#fff;
+    padding:14px 0;
+    box-shadow:0 -8px 24px rgba(0,0,0,0.18);
+    z-index:50;
+    transform:translateY(100%);
+    transition:transform .25s ease;
+  }
+  .cartbar.show{transform:translateY(0);}
+  .cartbar .wrap{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;}
+  .cartbar .info{font-size:14.5px;}
+  .cartbar .info b{font-family:'Rubik'; font-size:17px; color:var(--amber);}
+
+  /* ---------- Toast / modal ---------- */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,30,25,0.45);
+    display:flex; align-items:center; justify-content:center;
+    z-index:100; padding:20px;
+  }
+  .modal{
+    background:#fff; border-radius:20px; padding:32px 28px; max-width:400px; width:100%;
+    text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.25);
+  }
+  .modal .check-circle{
+    width:56px;height:56px;border-radius:50%;background:var(--forest-light);
+    color:#fff; display:flex;align-items:center;justify-content:center;
+    margin:0 auto 16px; font-size:26px;
+  }
+  .modal h3{margin:0 0 8px;font-size:19px;color:var(--forest);}
+  .modal p{margin:0 0 22px;color:var(--ink-soft);font-size:14.5px;line-height:1.6;}
+  .modal .actions{display:flex; flex-direction:column; gap:10px;}
+
+  /* ---------- Registration ---------- */
+  .form-wrap{max-width:560px; margin:36px auto 100px;}
+  .field{margin-bottom:18px;}
+  .field label{display:block; font-size:14px; font-weight:600; margin-bottom:6px; color:var(--ink);}
+  .field input{
+    width:100%; padding:12px 14px; border-radius:10px;
+    border:1.5px solid var(--paper-line); background:#fff;
+    font-family:inherit; font-size:15px; color:var(--ink);
+  }
+  .field input:focus{outline:2px solid var(--forest-light); outline-offset:1px; border-color:var(--forest-light);}
+  .field .err{color:var(--coral); font-size:12.5px; margin-top:5px; display:none;}
+  .field.invalid input{border-color:var(--coral);}
+  .field.invalid .err{display:block;}
+
+  .footer-note{text-align:center; font-size:13px; color:var(--ink-soft); padding:30px 0 90px;}
+
+  .empty-cart-hint{font-size:13px;color:var(--ink-soft); text-align:center; padding:14px 0;}
+
+  .grade-nav-pills{display:flex; gap:8px; flex-wrap:wrap; margin:20px 0 6px;}
+  .pill{
+    padding:7px 14px; border-radius:999px; font-size:13px; font-weight:600;
+    border:1.5px solid var(--paper-line); background:#fff; color:var(--ink-soft);
+  }
+  .pill.active{background:var(--forest); color:#fff; border-color:var(--forest);}
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+/* ============ DATA ============ */
+const GRADE_COLORS = {
+  "א'": "#3B6FA0",
+  "ב'": "#C5533E",
+  "ג'": "#D9A441",
+  "ד'": "#4C8C6B",
+  "ה'": "#7C6A9C",
+  "ו'": "#DB7F3B",
+};
+
+const DESIGN_OPTIONS = ["קלאסי חד-גוני", "חלל וכוכבים", "ספורט וכדורים", "פרחים וטבע"];
+
+const GRADES = [
+  {
+    letter: "א'", price: 149,
+    items: [
+      "מחברת קשר- מחברת 5A עם כריכה לבחירת הילד (שורות)",
+      "10 מחברות חכמות 10 שורות",
+      "2 מחברות חכמות משבצות",
+      "מחברת חכמה ראשית כתיבה, אותיות הכתב, גודל A4",
+      "מחברת ספירלה שורות גודל A4",
+      "עטיפות למחברות: אדום, כחול, לבן, 5 שקופות",
+      "תיקייה קשיחה עם גומי",
+      "קלסר חצי שקוף",
+      "חבילת מדבקות אותיות",
+      "לוח מחיק + טושים + מחק",
+      "שאר ציוד קלמר: 5 עפרונות מחודדים, מחדד, מחק, 5 מרקרים, צבעי עפרונות, טושים, דבק סטיק גדול",
+    ],
+  },
+  {
+    letter: "ב'", price: 155,
+    items: [
+      '4 מחברות "מכוונת" 10 שורות- כתב',
+      '2 מחברות חשבון "מכוונת"',
+      "3 מחברות 10 שורות רגילות",
+      "מחברת קטנה חלקה (לאנגלית)",
+      "מחברת A4 ספירלה שורות",
+      "עטיפות למחברות: אדום, כחול, צהוב, 5 שקופות",
+      "תיקייה קשיחה לדפי עבודה",
+      "יומן תלמיד/ה חד יומי עם תאריכים",
+      "לוח מחיק + טושים מחיקים + מחק",
+      "אוגדן מחברות (מומלץ)",
+      "שאר ציוד קלמר: עפרונות מחודדים, מחדד, מחק, מרקרים, צבעי עפרונות, טושים, דבק סטיק",
+    ],
+  },
+  {
+    letter: "ג'", price: 165,
+    items: [
+      "חשבון: 3 מחברות גודל A4",
+      'מדעים, תנ"ך, עברית, מולדת: 8 מחברות A4',
+      "אנגלית: 2 מחברות חכמות",
+      "תיקייה קשיחה עם גומי",
+      "לוח מחיק A4 + טוש ללוח",
+      "יומן תלמיד/ה",
+      "אוזניות ועכבר אלחוטי",
+      "מעמד לקטלוג",
+      "שאר ציוד קלמר: עפרונות מחודדים, צבעים/טושים, דבק סטיק, מחק, מחדד, מדגשים",
+    ],
+  },
+  {
+    letter: "ד'", price: 169,
+    items: [
+      "8 מחברות עברית A4",
+      "אנגלית: 2 מחברות",
+      "מתמטיקה: 3 מחברות משובצות A4",
+      "תיקייה קשיחה עם גומי לאיסוף דפי עבודה",
+      "לוח מחיק A4 + טוש ללוח",
+      "אוזניות ועכבר אלחוטי",
+      "מעמד לקטלוג",
+      "שאר ציוד קלמר: עפרונות מחודדים, צבעים, דבק סטיק, מחק, מחדד, מדגשים",
+    ],
+  },
+  {
+    letter: "ה'", price: 159,
+    items: [
+      "6 מחברות עברית שורה גודל A4",
+      "2 מחברות משובצות מתמטיקה A4 (או 3 מחברות A5)",
+      "לוח מחיק + 2 טושים ללוח מחיק",
+      "אוזניות ועכבר אלחוטי",
+      "שאר ציוד קלמר: כלי כתיבה, עפרונות, צבעים, מדגשים, מחק, מחדד, דבק סטיק",
+    ],
+  },
+  {
+    letter: "ו'", price: 175,
+    items: [
+      "7 מחברות עברית שורה גודל A4",
+      "2 מחברות משובצות מתמטיקה A4 (או 3 מחברות A5)",
+      "אוזניות ועכבר אלחוטי (מומלץ)",
+      "שאר ציוד קלמר: כלי כתיבה, עפרונות, צבעים, מדגשים, מחק, מחדד, דבק סטיק",
+    ],
+  },
+];
+
+// customizable items appear in every package
+const CUSTOM_ITEMS = [
+  { key: "stickers", label: "מדבקות שם" },
+  { key: "ruler", label: "סרגל" },
+  { key: "scissors", label: "מספריים" },
+];
+
+/* ============ STATE ============ */
+let state = {
+  view: "home",          // home | package | checkout | confirm
+  selectedGrade: null,
+  draft: { stickers: DESIGN_OPTIONS[0], ruler: DESIGN_OPTIONS[0], scissors: DESIGN_OPTIONS[0] },
+  cart: [],               // {letter, price, custom:{...}}
+  showAddedModal: false,
+  form: { name:"", phone:"", email:"" },
+  errors: {},
+};
+
+function cartTotal(){ return state.cart.reduce((s,i)=>s+i.price,0); }
+
+/* ============ ICONS (inline svg) ============ */
+const ICON_LEAF = `<svg width="30" height="30" viewBox="0 0 48 48" fill="none"><path d="M40 8C22 8 8 22 8 40c18 0 32-14 32-32Z" fill="#EAF3EE" opacity="0.25"/><path d="M39 9C22 9.5 9.5 22 9 39c17-.5 29.5-13 30-30Z" stroke="white" stroke-width="2.4" fill="none"/><path d="M12 36C20 28 28 20 37 11" stroke="white" stroke-width="2.2" stroke-linecap="round"/></svg>`;
+const ICON_FUN = `<svg width="30" height="30" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="18" r="10" stroke="white" stroke-width="2.4"/><path d="M24 8v3M24 25v3M14 18h3M31 18h3M17 11l2 2M31 25l2 2M31 11l-2 2M17 25l-2 2" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M24 28c-4 6-4 10 0 12 4-2 4-6 0-12Z" fill="#E8A23A"/></svg>`;
+
+/* ============ RENDER HELPERS ============ */
+function topbar(){
+  return `
+  <div class="logobar">
+    <div class="wrap">
+      <div class="brandmark">
+        ${ICON_LEAF}
+        <div>
+          <div class="name">בית הספר הירוק</div>
+          <div class="label">הנהגת ההורים</div>
+        </div>
+      </div>
+      <div class="x-divider">×</div>
+      <div class="brandmark">
+        ${ICON_FUN}
+        <div>
+          <div class="name">כפר השעשועים</div>
+          <div class="label">חנקין 14, הוד״ש</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderHome(){
+  const cards = GRADES.map((g, idx) => `
+    <div class="grade-card" data-idx="${idx}">
+      <div class="grade-tab" style="background:${GRADE_COLORS[g.letter]}; color:${GRADE_COLORS[g.letter]};">
+        <span class="letter" style="color:#fff;">כיתה ${g.letter}</span>
+        <span class="tag" style="color:#fff;">${g.items.length} פריטים</span>
+      </div>
+      <div class="grade-body">
+        <h3>חבילה לעולים לכיתה ${g.letter}</h3>
+        <div class="count">כולל את כל רשימת הציוד הרשמית + אפשרות להתאמה אישית</div>
+        <div class="price-row">
+          <div class="price">${g.price} ₪</div>
+          <button class="btn btn-primary" data-idx="${idx}">לפרטי החבילה</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  return `
+  ${topbar()}
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow"><span class="dot"></span> חוזרים לשנת הלימודים תשפ״ז</div>
+      <h1>הנהגת ההורים של בית הספר הירוק בשיתוף <span class="accent">כפר השעשועים</span> (חנקין 14, הוד״ש)<br>מחזירה אתכם לבית הספר בקלות ובצורה משתלמת.</h1>
+      <p class="sub">כל רשימת הציוד הרשמית של בית הספר, ארוזה מראש לפי כיתה, במחיר קבוע וללא הפתעות. אתם בוחרים, אנחנו מכינים.</p>
+
+      <div class="steps">
+        <div class="step"><span class="num">01</span><p>בוחרים כיתה</p></div>
+        <div class="step"><span class="num">02</span><p>בוחרים העדפות אישיות בחבילה</p></div>
+        <div class="step"><span class="num">03</span><p>נרשמים</p></div>
+        <div class="step final"><span class="num">04</span><p>מקבלים הודעה שהחבילה מוכנה, מגיעים לאסוף ומשלמים</p></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="section-title">
+      <h2>בוחרים חבילה לפי כיתה</h2>
+      <span>קל ומהיר — עד 3 דקות</span>
+    </div>
+    <div class="grade-grid">${cards}</div>
+  </div>
+  ${footerNote()}
+  ${renderCartBar()}
+  `;
+}
+
+function renderPackage(){
+  const g = GRADES.find(x=>x.letter===state.selectedGrade);
+  const color = GRADE_COLORS[g.letter];
+
+  const plainItems = g.items.map(i=>`<li><span class="check">✓</span><span>${i}</span></li>`).join("");
+
+  const customBlocks = CUSTOM_ITEMS.map(ci => `
+    <div class="custom-item">
+      <div class="label">${ci.label} <span class="badge">בחירת עיצוב</span></div>
+      <select class="design-select" onchange="updateDraft('${ci.key}', this.value)">
+        ${DESIGN_OPTIONS.map(opt => `<option value="${opt}" ${state.draft[ci.key]===opt ? "selected":""}>${opt}</option>`).join("")}
+      </select>
+    </div>
+  `).join("");
+
+  return `
+  ${topbar()}
+  <div class="wrap">
+    <div class="breadcrumb"><button onclick="goHome()">← כל החבילות</button> / כיתה ${g.letter}</div>
+    <div class="pkg-header">
+      <div class="pkg-tab" style="background:${color};">${g.letter}</div>
+      <div>
+        <h2>חבילה לעולים לכיתה ${g.letter}</h2>
+        <div class="price" style="color:${color};">${g.price} ₪</div>
+      </div>
+    </div>
+
+    <div class="pkg-layout">
+      <div class="card">
+        <h3>תכולת החבילה</h3>
+        <ul class="item-list">${plainItems}</ul>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:20px;">
+          <h3>בחירת עיצוב אישי</h3>
+          ${customBlocks}
+        </div>
+        <button class="btn btn-amber btn-block" style="padding:14px;font-size:15.5px;" onclick="addToCart()">🛒 הוסף לסל</button>
+      </div>
+    </div>
+  </div>
+  ${footerNote()}
+  ${renderCartBar()}
+  ${state.showAddedModal ? renderAddedModal(g) : ""}
+  `;
+}
+
+function renderAddedModal(g){
+  return `
+  <div class="overlay">
+    <div class="modal">
+      <div class="check-circle">✓</div>
+      <h3>החבילה לכיתה ${g.letter} נוספה לסל</h3>
+      <p>אפשר להוסיף עוד חבילה לכיתה אחרת, או לעבור להשלמת ההרשמה.</p>
+      <div class="actions">
+        <button class="btn btn-primary btn-block" onclick="closeModalAndGoHome()">בחירת חבילה נוספת</button>
+        <button class="btn btn-ghost btn-block" onclick="closeModalAndCheckout()">המשך לרישום</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderCartBar(){
+  if(state.cart.length===0 || state.view==='checkout' || state.view==='confirm') return "";
+  return `
+  <div class="cartbar show">
+    <div class="wrap">
+      <div class="info">בסל: <b>${state.cart.length}</b> חבילות · סה״כ <b>${cartTotal()} ₪</b></div>
+      <button class="btn btn-amber" onclick="goToCheckout()">המשך לרישום ←</button>
+    </div>
+  </div>`;
+}
+
+function renderCheckout(){
+  const rows = state.cart.map((c,idx)=>`
+    <div class="summary-row">
+      <span>חבילה לכיתה ${c.letter}</span>
+      <span>${c.price} ₪</span>
+    </div>
+  `).join("");
+
+  const err = state.errors;
+  return `
+  ${topbar()}
+  <div class="wrap">
+    <div class="breadcrumb"><button onclick="goHome()">← כל החבילות</button> / רישום</div>
+    <div class="section-title"><h2>השלמת הרשמה</h2></div>
+
+    <div class="pkg-layout">
+      <div class="card">
+        <h3>פרטים ליצירת קשר</h3>
+        <div class="field ${err.name?'invalid':''}">
+          <label>שם מלא</label>
+          <input type="text" value="${state.form.name}" oninput="updateForm('name', this.value)" placeholder="לדוגמה: דנה כהן">
+          <div class="err">נא להזין שם מלא</div>
+        </div>
+        <div class="field ${err.phone?'invalid':''}">
+          <label>טלפון</label>
+          <input type="tel" value="${state.form.phone}" oninput="updateForm('phone', this.value)" placeholder="050-0000000">
+          <div class="err">נא להזין מספר טלפון תקין</div>
+        </div>
+        <div class="field ${err.email?'invalid':''}">
+          <label>כתובת אימייל</label>
+          <input type="email" value="${state.form.email}" oninput="updateForm('email', this.value)" placeholder="name@example.com">
+          <div class="err">נא להזין כתובת אימייל תקינה</div>
+        </div>
+        <button class="btn btn-primary btn-block" style="padding:14px;font-size:15.5px;margin-top:6px;" onclick="submitOrder()">שליחת הרשמה</button>
+      </div>
+
+      <div class="card">
+        <h3>סיכום הזמנה</h3>
+        ${rows || '<div class="empty-cart-hint">הסל ריק</div>'}
+        <div class="summary-total"><span>סה״כ לתשלום באיסוף</span><span>${cartTotal()} ₪</span></div>
+      </div>
+    </div>
+  </div>
+  ${footerNote()}
+  `;
+}
+
+function renderConfirm(){
+  return `
+  ${topbar()}
+  <div class="wrap">
+    <div class="form-wrap">
+      <div class="card" style="text-align:center;">
+        <div class="check-circle" style="margin:0 auto 16px;">✓</div>
+        <h2 style="color:var(--forest);">ההרשמה התקבלה בהצלחה!</h2>
+        <p style="color:var(--ink-soft); line-height:1.7;">
+          תודה, ${state.form.name || "הורה יקר"}! שלחנו אישור לכתובת ${state.form.email || ""}.<br>
+          נעדכן אתכם בהודעה כשהחבילה שלכם תהיה מוכנה לאיסוף בכפר השעשועים, חנקין 14, הוד״ש.
+        </p>
+        <div class="summary-total" style="margin-top:18px;"><span>סה״כ לתשלום באיסוף</span><span>${cartTotal()} ₪</span></div>
+        <button class="btn btn-primary btn-block" style="margin-top:22px;padding:13px;" onclick="restart()">חזרה לדף הראשי</button>
+      </div>
+    </div>
+  </div>
+  `;
+}
+
+function footerNote(){
+  return `<div class="footer-note">רשימת הציוד מבוססת על הנחיות בית הספר לשנת תשפ״ז · ייתכנו שינויים · לשאלות ניתן לפנות להנהגת ההורים</div>`;
+}
+
+/* ============ ACTIONS ============ */
+function render(){
+  const app = document.getElementById("app");
+  if(state.view==="home") app.innerHTML = renderHome();
+  else if(state.view==="package") app.innerHTML = renderPackage();
+  else if(state.view==="checkout") app.innerHTML = renderCheckout();
+  else if(state.view==="confirm") app.innerHTML = renderConfirm();
+  window.scrollTo({top:0, behavior:"instant"});
+
+  // event delegation for grade cards (avoids inline onclick issues with
+  // Hebrew geresh/apostrophe characters like א', ב' inside letter strings)
+  if(state.view==="home"){
+    document.querySelectorAll(".grade-card").forEach(card=>{
+      card.addEventListener("click", ()=> goToPackage(parseInt(card.dataset.idx,10)));
+    });
+  }
+}
+
+function goToPackage(idx){
+  state.selectedGrade = GRADES[idx].letter;
+  state.draft = { stickers: DESIGN_OPTIONS[0], ruler: DESIGN_OPTIONS[0], scissors: DESIGN_OPTIONS[0] };
+  state.view = "package";
+  render();
+}
+function goHome(){ state.view="home"; state.showAddedModal=false; render(); }
+function goToCheckout(){ state.view="checkout"; render(); }
+
+function updateDraft(key, val){ state.draft[key] = val; }
+
+function addToCart(){
+  const g = GRADES.find(x=>x.letter===state.selectedGrade);
+  state.cart.push({ letter: g.letter, price: g.price, custom: {...state.draft} });
+  state.showAddedModal = true;
+  render();
+}
+function closeModalAndGoHome(){ state.showAddedModal=false; goHome(); }
+function closeModalAndCheckout(){ state.showAddedModal=false; goToCheckout(); }
+
+function updateForm(key, val){ state.form[key]=val; if(state.errors[key]) delete state.errors[key]; }
+
+function submitOrder(){
+  const errors = {};
+  if(!state.form.name || state.form.name.trim().length<2) errors.name = true;
+  if(!state.form.phone || state.form.phone.replace(/\D/g,"").length<9) errors.phone = true;
+  if(!state.form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(state.form.email)) errors.email = true;
+  state.errors = errors;
+  if(Object.keys(errors).length>0){ render(); return; }
+  state.view = "confirm";
+  render();
+}
+
+function restart(){
+  state = { view:"home", selectedGrade:null, draft:{stickers:DESIGN_OPTIONS[0],ruler:DESIGN_OPTIONS[0],scissors:DESIGN_OPTIONS[0]}, cart:[], showAddedModal:false, form:{name:"",phone:"",email:""}, errors:{} };
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
