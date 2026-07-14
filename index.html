@@ -418,13 +418,18 @@ const DESIGN_OPTIONS = {
   ruler: ["דונטס", "מיקי מאוס", "לבבות", "גלידות", "במבי", "קאפיברה", "כדורסל", "כדורגל", "ספיידרמן"],
   scissors: ["ורוד אפור", "אדום לבן", "מנטה אפור", "תכלת אפור", "כחול אפור", "שחור אפור", "מספריים לשמאליים"],
   stickers: ["קייפופ", "ספיידרמן", "במבי", "פרוזן", "ברול סטאר", "כדורגל", "גלידות"],
+  headset: ["עם", "בלי"],
 };
+
+// choosing "בלי" for the headset+mouse lowers the package price
+const HEADSET_DISCOUNT = 50;
 
 function defaultDraft(){
   return {
     stickers: DESIGN_OPTIONS.stickers[0],
     ruler: DESIGN_OPTIONS.ruler[0],
     scissors: DESIGN_OPTIONS.scissors[0],
+    headset: DESIGN_OPTIONS.headset[0],
   };
 }
 
@@ -479,7 +484,7 @@ const GRADES = [
     ],
   },
   {
-    letter: "ג'", price: 180,
+    letter: "ג'", price: 180, headsetChoice: true,
     items: [
       "חשבון: 3 מחברות גודל A4",
       'מדעים, תנ"ך, עברית, מולדת: 8 מחברות גודל A4',
@@ -492,7 +497,7 @@ const GRADES = [
     ],
   },
   {
-    letter: "ד'", price: 180,
+    letter: "ד'", price: 180, headsetChoice: true,
     items: [
       "8 מחברות עברית A4",
       "אנגלית: 2 מחברות",
@@ -505,7 +510,7 @@ const GRADES = [
     ],
   },
   {
-    letter: "ה'", price: 150,
+    letter: "ה'", price: 150, headsetChoice: true,
     items: [
       "6 מחברות עברית שורה גודל A4",
       "2 מחברות משובצות למתמטיקה גודל A4 או 3 מחברות A5 (לבחירתכם)",
@@ -515,7 +520,7 @@ const GRADES = [
     ],
   },
   {
-    letter: "ו'", price: 140,
+    letter: "ו'", price: 140, headsetChoice: true,
     items: [
       "7 מחברות עברית שורה גודל A4",
       "2 מחברות משובצות למתמטיקה גודל A4 או 3 מחברות A5 (לבחירתכם)",
@@ -525,12 +530,22 @@ const GRADES = [
   },
 ];
 
-// customizable items appear in every package
+// customizable items appear in every package; the headset choice only in
+// grades whose package includes it (headsetChoice on the grade)
 const CUSTOM_ITEMS = [
   { key: "stickers", label: "מדבקות שם" },
   { key: "ruler", label: "סרגל" },
   { key: "scissors", label: "מספריים" },
+  { key: "headset", label: "אוזניות ועכבר אלחוטי", badge: "עם / בלי", note: `בחירה ב״בלי״ מוזילה את מחיר החבילה ב-${HEADSET_DISCOUNT} ₪` },
 ];
+
+function customItemsFor(g){
+  return CUSTOM_ITEMS.filter(ci => ci.key !== "headset" || g.headsetChoice);
+}
+
+function packagePrice(g){
+  return g.price - (g.headsetChoice && state.draft.headset === "בלי" ? HEADSET_DISCOUNT : 0);
+}
 
 /* ============ STATE ============ */
 let state = {
@@ -694,12 +709,13 @@ function renderPackage(){
       </li>`;
   }).join("");
 
-  const customBlocks = CUSTOM_ITEMS.map(ci => `
+  const customBlocks = customItemsFor(g).map(ci => `
     <div class="custom-item">
-      <div class="label">${ci.label} <span class="badge">בחירת עיצוב</span></div>
+      <div class="label">${ci.label} <span class="badge">${ci.badge || "בחירת עיצוב"}</span></div>
       <select class="design-select" onchange="updateDraft('${ci.key}', this.value)">
         ${DESIGN_OPTIONS[ci.key].map(opt => `<option value="${opt}" ${state.draft[ci.key]===opt ? "selected":""}>${opt}</option>`).join("")}
       </select>
+      ${ci.note ? `<div style="font-size:12.5px;color:var(--ink-soft);margin-top:6px;">${ci.note}</div>` : ""}
     </div>
   `).join("");
 
@@ -711,7 +727,7 @@ function renderPackage(){
       <div class="pkg-tab" style="background:${color};">${g.letter}</div>
       <div>
         <h2>חבילה לעולים לכיתה ${g.letter}</h2>
-        <div class="price" style="color:${color};">${g.price} ₪</div>
+        <div class="price" id="pkg-price" style="color:${color};">${packagePrice(g)} ₪</div>
       </div>
     </div>
 
@@ -823,8 +839,8 @@ function renderConfirm(){
         <span class="confirm-pkg-price">${c.price} ₪</span>
       </div>
       <ul class="confirm-custom">
-        ${CUSTOM_ITEMS.map(ci => `
-          <li><span class="ck">${ci.label}</span><span class="cv">${(c.custom && c.custom[ci.key]) || "—"}</span></li>
+        ${CUSTOM_ITEMS.filter(ci => c.custom && ci.key in c.custom).map(ci => `
+          <li><span class="ck">${ci.label}</span><span class="cv">${c.custom[ci.key] || "—"}</span></li>
         `).join("")}
       </ul>
     </div>
@@ -915,11 +931,19 @@ window.addEventListener("popstate", (e)=>{
   render();
 });
 
-function updateDraft(key, val){ state.draft[key] = val; }
+function updateDraft(key, val){
+  state.draft[key] = val;
+  // refresh the displayed price in place (a full render() would scroll to top)
+  const g = GRADES.find(x=>x.letter===state.selectedGrade);
+  const priceEl = document.getElementById("pkg-price");
+  if(g && priceEl) priceEl.textContent = `${packagePrice(g)} ₪`;
+}
 
 function addToCart(){
   const g = GRADES.find(x=>x.letter===state.selectedGrade);
-  state.cart.push({ letter: g.letter, price: g.price, custom: {...state.draft} });
+  const custom = {};
+  customItemsFor(g).forEach(ci => { custom[ci.key] = state.draft[ci.key]; });
+  state.cart.push({ letter: g.letter, price: packagePrice(g), custom });
   state.showAddedModal = true;
   render();
 }
@@ -941,7 +965,7 @@ function updateForm(key, val){ state.form[key]=val; if(state.errors[key]) delete
    4. Paste that URL below, instead of the empty string.
    Until a URL is set here, registrations simply skip the network call
    and the demo flow still works end-to-end. */
-const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbzageHYd7y8dynSQuR52Vzj0yH7kwmPUd8U_DqI8yBVGnnhbC-gvDZxirbAOfphAH_E3w/exec"; // <-- Apps Script Web App URL
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbws_8knEyxXvzun33qfqI-NuhQTOSpL31q47TgHrerSYvFthfFd2KwGZeXkqPp_xcC5oQ/exec"; // <-- Apps Script Web App URL
 
 function submitToGoogleSheet(payload){
   if(!SHEET_ENDPOINT) return Promise.resolve();
